@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Baby</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #fff9f5 0%, #f3e7df 55%, #e8d8d0 100%);
+    color: #4b403d;
+}
+
+#intro {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    transition: opacity .8s ease, transform .8s ease;
+}
+
+.intro-content {
+    text-align: center;
+}
+
+.intro-content h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: normal;
+    margin: 0 0 12px;
+    color: #604943;
+}
+
+.intro-content > p {
+    margin: 0 0 40px;
+    color: #89736d;
+}
+
+/* SCENE */
+
+.scene {
+    width: 420px;
+    max-width: 100%;
+    height: 320px;
+    position: relative;
+    margin: auto;
+    perspective: 1000px;
+}
+
+/* LITTLE PAPER */
+
+.paper-one {
+    position: absolute;
+    width: 90px;
+    height: 70px;
+    background: #fffaf4;
+    left: 20px;
+    bottom: 25px;
+    transform: rotate(-12deg);
+    border-radius: 4px;
+    box-shadow: 0 8px 18px rgba(60,40,35,.08);
+}
+
+.paper-one::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 18px;
+    width: 55px;
+    height: 2px;
+    background: #e4d2c9;
+    box-shadow: 0 12px #e4d2c9, 0 24px #e4d2c9;
+}
+
+/* NOTE */
+
+.note {
+    position: absolute;
+    width: 85px;
+    height: 85px;
+    background: #f4dfb7;
+    right: 12px;
+    top: 50px;
+    transform: rotate(8deg);
+    border-radius: 3px;
+    box-shadow: 0 8px 18px rgba(60,40,35,.08);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: Georgia, serif;
+    font-size: 13px;
+    color: #806b56;
+}
+
+/* FLOWER */
+
+.flower {
+    position: absolute;
+    right: 35px;
+    bottom: 5px;
+    width: 55px;
+    height: 100px;
+    transform: rotate(12deg);
+}
+
+.stem {
+    position: absolute;
+    width: 3px;
+    height: 70px;
+    background: #8fa084;
+    left: 27px;
+    bottom: 0;
+}
+
+.petal {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: #e8b8b0;
+    border-radius: 50%;
+}
+
+.p1 { top: 0; left: 15px; }
+.p2 { top: 12px; left: 0; }
+.p3 { top: 12px; right: 0; }
+.p4 { top: 25px; left: 15px; }
+
+.flower-center {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #d6a867;
+    border-radius: 50%;
+    top: 16px;
+    left: 19px;
+}
+
+/* SPARKLES */
+
+.sparkle {
+    position: absolute;
+    color: #cda29a;
+    font-size: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.sparkle.one {
+    top: 30px;
+    left: 70px;
+}
+
+.sparkle.two {
+    top: 85px;
+    right: 105px;
+    animation-delay: 1s;
+}
+
+.sparkle.three {
+    bottom: 70px;
+    left: 40px;
+    animation-delay: 2s;
+}
+
+/* ENVELOPE */
+
+.envelope-wrapper {
+    width: 340px;
+    height: 220px;
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: transform .4s ease;
+    z-index: 5;
+}
+
+.envelope-wrapper:hover {
+    transform: translateX(-50%) translateY(-6px);
+}
+
+.envelope {
+    position: absolute;
+    width: 100%;
+    height: 220px;
+    background: #d6a198;
+    border-radius: 8px;
+    box-shadow: 0 20px 45px rgba(65,45,40,.18);
+}
+
+/* HIDDEN LETTER */
+
+.small-letter {
+    position: absolute;
+    width: 82%;
+    height: 175px;
+    left: 9%;
+    bottom: 20px;
+    background: #fffdf9;
+    border-radius: 5px;
+    padding: 22px;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(35px);
+    box-shadow: 0 5px 20px rgba(60,40,35,.1);
+    transition: opacity .4s ease, transform 1.1s cubic-bezier(.22,.61,.36,1);
+}
+
+.small-letter h2,
+.small-letter p {
+    opacity: 0;
+    transition: opacity .4s ease .5s;
+}
+
+.small-letter h2 {
+    font-family: Georgia, serif;
+    font-weight: normal;
+    color: #604943;
+    margin-top: 18px;
+}
+
+.small-letter p {
+    font-size: 13px;
+    color: #947d76;
+}
+
+/* ENVELOPE FRONT */
+
+.front {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 170px solid transparent;
+    border-right: 170px solid transparent;
+    border-bottom: 120px solid #c9938a;
+    bottom: 0;
+    z-index: 4;
+}
+
+/* FLAP */
+
+.flap {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 170px solid transparent;
+    border-right: 170px solid transparent;
+    border-top: 120px solid #e3b2a8;
+    top: 0;
+    z-index: 6;
+    transform-origin: top;
+    transition: transform 1s cubic-bezier(.68,-.55,.27,1.55);
+}
+
+/* OPEN ENVELOPE */
+
+.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.open .small-letter {
+    opacity: 1;
+    transform: translateY(-140px);
+    z-index: 5;
+}
+
+.open .small-letter h2,
+.open .small-letter p {
+    opacity: 1;
+}
+
+.hint {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #9b817a;
+}
+
+/* FULL LETTER */
+
+#letterPage {
+    display: none;
+    min-height: 100vh;
+    padding: 45px 15px;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.full-letter {
+    width: 800px;
+    max-width: 100%;
+    margin: auto;
+    background: #fffdf9;
+    padding: clamp(30px, 7vw, 70px);
+    border-radius: 12px;
+    box-shadow: 0 25px 70px rgba(65,45,40,.16);
+    animation: unfold 1s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+.full-letter h1 {
+    font-family: Georgia, serif;
+    font-weight: normal;
+    font-size: clamp(2.1rem, 7vw, 3.5rem);
+    color: #604943;
+    margin-bottom: 45px;
+}
+
+.full-letter p {
+    font-size: 16px;
+    line-height: 1.9;
+    margin-bottom: 25px;
+    color: #504643;
+}
+
+.signature {
+    margin-top: 50px;
+    font-family: Georgia, serif;
+    font-size: 21px;
+    color: #604943;
+}
+
+.end-note {
+    margin-top: 60px;
+    padding-top: 25px;
+    border-top: 1px solid #eee3dd;
+    text-align: center;
+    font-size: 14px;
+    color: #9b817a;
+}
+
+.playful {
+    display: inline-block;
+    font-family: Georgia, serif;
+    font-size: 17px;
+    color: #7d5d56;
+    animation: littleBounce 2.5s ease-in-out infinite;
+}
+
+
+
+/* SECRET FLOWER GAME */
+.game-section { margin-top: 45px; text-align: center; }
+.game-title { font-family: Georgia, serif; color:#604943; font-size:20px; margin-bottom:18px; }
+.number-buttons { display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; max-width:420px; margin:0 auto; }
+.number-btn { border:none; background:#e3b2a8; color:#604943; height:48px; border-radius:12px; font-family:Georgia,serif; font-size:17px; cursor:pointer; transition:transform .2s ease, background .2s ease; }
+.number-btn:hover { transform:translateY(-3px); background:#d6a198; }
+.game-area { display:none; position:relative; width:100%; max-width:500px; height:310px; margin:25px auto 0; overflow:hidden; background:#f8eee9; border-radius:20px; box-shadow:0 15px 35px rgba(70,45,40,.1); }
+.game-area.show { display:block; }
+.score { position:absolute; top:18px; right:22px; color:#9b817a; font-family:Georgia,serif; font-size:14px; }
+.moving-flower { position:absolute; width:60px; height:60px; border:none; background:transparent; font-size:45px; cursor:pointer; transition:left .28s ease, top .28s ease, transform .2s ease; }
+.game-result { position:absolute; width:100%; left:0; bottom:35px; padding:0 25px; font-family:Georgia,serif; color:#604943; opacity:0; transition:opacity .5s ease; }
+.game-result.show { opacity:1; }
+.win-title { font-size:24px; margin-bottom:12px; animation:littleBounce 2s ease-in-out infinite; }
+.win-text { font-size:18px; line-height:1.6; }
+@keyframes flowerPop { 0%{transform:scale(1)} 50%{transform:scale(1.4) rotate(20deg)} 100%{transform:scale(1)} }
+
+/* ANIMATIONS */
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: .6;
+    }
+    50% {
+        transform: translateY(-8px);
+        opacity: 1;
+    }
+}
+
+@keyframes unfold {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes littleBounce {
+    0%, 100% {
+        transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+        transform: translateY(-4px) rotate(-1deg);
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 450px) {
+    .scene {
+        transform: scale(.85);
+        margin-top: -25px;
+        margin-bottom: -25px;
+    }
+
+    .full-letter p {
+        font-size: 15px;
+        line-height: 1.85;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section id="intro">
+<div class="intro-content">
+
+<h1>Hey, Baby.</h1>
+<p>I made something for you.</p>
+
+<div class="scene">
+
+    <div class="paper-one"></div>
+
+    <div class="note">
+        just for you
+    </div>
+
+    <div class="flower">
+        <div class="stem"></div>
+        <div class="petal p1"></div>
+        <div class="petal p2"></div>
+        <div class="petal p3"></div>
+        <div class="petal p4"></div>
+        <div class="flower-center"></div>
+    </div>
+
+    <div class="sparkle one">✦</div>
+    <div class="sparkle two">✦</div>
+    <div class="sparkle three">✦</div>
+
+    <div class="envelope-wrapper" id="envelopeWrapper">
+
+        <div class="envelope">
+
+            <div class="small-letter" id="smallLetter">
+                <h2>For you</h2>
+                <p>There's something I want to say.</p>
+            </div>
+
+            <div class="front"></div>
+            <div class="flap"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="hint" id="hint">
+    Click the envelope
+</div>
+
+</div>
+</section>
+
+
+<section id="letterPage">
+
+<div class="full-letter">
+
+<h1>Hey Baby,</h1>
+
+<p>I just want to start by saying that I'm genuinely sorry. I know there are things I've done that hurt you or made you feel uncomfortable, and I don't want to act like your feelings aren't valid. If something I did made you overthink, feel insecure, or question me, I understand why you felt that way.</p>
+
+<p>I'm not expecting you to suddenly be okay just because I'm saying sorry. I know feelings don't work like that, and I know trust and reassurance take time. I just want you to know that I'm listening, and I genuinely care about how you feel.</p>
+
+<p>I really want to be a better boyfriend for you. Not just say it whenever something goes wrong and then go back to doing the same things. I want to actually learn from my mistakes and show you through my actions that I'm serious about us.</p>
+
+<p>And I want you to know that I'm genuinely in love with you. My feelings for you aren't something temporary or something I'm unsure about. I truly want to commit to you and to this relationship. You're the person I want to spend my time with, make memories with, laugh with, and grow with.</p>
+
+<p>I know I'm not perfect, and I know I'll still have things to work on, but I don't want to use that as an excuse. I want to improve. I want to communicate better, understand you better, and give you the reassurance you deserve.</p>
+
+<p>I don't want you to feel like you're competing with anyone or questioning whether you're enough. You are enough for me, Baby. I want you to feel secure with me, and I want to be someone you can trust and feel comfortable with.</p>
+
+<p>I'm sorry for the mistakes I've made. I can't take back things that already happened, but I can take responsibility for them and do better moving forward. I'm willing to be patient and earn back your trust instead of expecting you to just give it to me immediately.</p>
+
+<p>I really hope you can forgive me when you're ready. No pressure and no rushing you. I just hope that, with time, I can show you how serious I am about you and about us.</p>
+
+<p>I don't want to give up on what we have. I still want more random conversations, more laughs, more memories, and even more of those moments where we're just being ourselves together.</p>
+
+<p>I'm here, Baby. And I'm genuinely choosing you. I want to commit to you, grow with you, and be better for us.</p>
+
+<div class="signature">
+With love,<br>
+Marcus
+</div>
+
+<div class="end-note">
+    Thank you for taking the time to read this.
+    <br><br>
+    <span class="playful">
+        Also... wag na po masungit please.
+    </span>
+</div>
+
+
+
+<!-- SECRET FLOWER GAME -->
+<div class="game-section">
+  <div id="numberPicker">
+    <div class="game-title">Pick a number.</div>
+    <div class="number-buttons">
+      <button class="number-btn">1</button><button class="number-btn">2</button><button class="number-btn">3</button><button class="number-btn">4</button><button class="number-btn">5</button>
+      <button class="number-btn">6</button><button class="number-btn">7</button><button class="number-btn">8</button><button class="number-btn">9</button><button class="number-btn">10</button>
+    </div>
+  </div>
+  <div class="game-area" id="gameArea">
+    <div class="game-title" id="gameTitle">Catch the flower!</div>
+    <div class="score" id="score">0 / 0</div>
+    <button class="moving-flower" id="movingFlower">✿</button>
+    <div class="game-result" id="gameResult"></div>
+  </div>
+</div>
+</div>
+</section>
+
+
+<script>
+
+const envelopeWrapper = document.getElementById("envelopeWrapper");
+const intro = document.getElementById("intro");
+const letterPage = document.getElementById("letterPage");
+const hint = document.getElementById("hint");
+const smallLetter = document.getElementById("smallLetter");
+
+let opened = false;
+
+envelopeWrapper.addEventListener("click", () => {
+
+    if (!opened) {
+        opened = true;
+        envelopeWrapper.classList.add("open");
+        hint.textContent = "Now click the letter";
+    }
+
+});
+
+smallLetter.addEventListener("click", (event) => {
+
+    event.stopPropagation();
+
+    if (!opened) return;
+
+    intro.style.opacity = "0";
+    intro.style.transform = "scale(.98)";
+
+    setTimeout(() => {
+
+        intro.style.display = "none";
+        letterPage.style.display = "block";
+
+        requestAnimationFrame(() => {
+            letterPage.style.opacity = "1";
+        });
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }, 700);
+
+});
+
+
+/* SECRET NUMBER FLOWER GAME */
+const numberPicker=document.getElementById("numberPicker");
+const numberButtons=document.querySelectorAll(".number-btn");
+const gameArea=document.getElementById("gameArea");
+const movingFlower=document.getElementById("movingFlower");
+const gameResult=document.getElementById("gameResult");
+const gameTitle=document.getElementById("gameTitle");
+const scoreDisplay=document.getElementById("score");
+let targetScore=0, flowerScore=0;
+
+numberButtons.forEach(button=>button.addEventListener("click",()=>{
+  targetScore=parseInt(button.textContent);
+  numberPicker.style.display="none";
+  gameArea.classList.add("show");
+  gameTitle.textContent="Catch the flower "+targetScore+" times!";
+  scoreDisplay.textContent="0 / "+targetScore;
+  moveFlower();
+}));
+
+function moveFlower(){
+  const x=Math.random()*(gameArea.clientWidth-60);
+  const y=65+Math.random()*(gameArea.clientHeight-150);
+  movingFlower.style.left=x+"px";
+  movingFlower.style.top=y+"px";
+}
+
+movingFlower.addEventListener("click",()=>{
+  flowerScore++;
+  scoreDisplay.textContent=flowerScore+" / "+targetScore;
+  movingFlower.style.animation="flowerPop .3s ease";
+  setTimeout(()=>movingFlower.style.animation="",300);
+  if(flowerScore<targetScore){
+    setTimeout(moveFlower,180);
+  }else{
+    movingFlower.style.display="none";
+    gameResult.innerHTML='<div class="win-title">You win! ✿</div><div class="win-text">Now send me pics.</div>';
+    gameResult.classList.add("show");
+  }
+});
+
+</script>
+
+</body>
+</html>
